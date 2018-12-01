@@ -344,7 +344,7 @@ void fuckEvenList() {
 	displayList(listnode);
 }
 
-// 2013 #4 求递增AB链表的交集 并排倒序 * 
+// 2013 #4 求递增AB链表的交集，并排倒序* 
 void unionList() {
 	ListNode listA = setupList();
 	ListNode listB = setupList();
@@ -369,6 +369,68 @@ void unionList() {
 	displayList(listA);
 }
 
+// 2018 #4 调整链表让负数节点在正数节点后，返回第一个负数节点
+int negativeList18() {
+	// 尾节点是最后一个正数节点的位置，定位index 
+	// 如果前面有一个节点要插入到尾部 那么index-1 
+	ListNode head = setupList();
+	int index = 1;
+	ListNode end = head->next;	// 尾节点 
+	ListNode suc = NULL;	// 尾节点的后继 
+	ListNode pre = head;	// 当前节点的后继
+	ListNode cur = head->next; // 当前节点
+	while(end->next != NULL) {
+		end = end->next;
+		index++;
+	}
+	while(cur != end) {
+		if(cur->value < 0) {
+			ListNode tmp = cur;
+			pre->next = cur->next;
+			cur = cur->next;
+			tmp->next = suc;
+			end->next = tmp;
+			suc = end->next;
+			index--;
+		}
+		else {
+			pre = pre->next;
+			cur = cur->next;
+		}
+	}
+	if(end->value >= 0)	// 最好特别判断一下尾节点 如果值大于零 说明位置要加1 
+		index++;
+	displayList(head);
+	return index;
+} 
+
+// 2012 922真题 O(n)时间内使负数在正数前面
+void negativeSort() {
+	// 和2018 #4类似，只是不需要输出节点位置 
+	ListNode head = setupList();
+	ListNode end = head->next;	// 尾节点
+	ListNode suc = NULL;	// 尾节点后继
+	ListNode pre = head;	// 当前节点的前驱
+	ListNode cur = head->next;	// 当前节点
+	while(end->next != NULL)
+		end = end->next;
+	while(cur != end) {
+		if(cur->value > 0) {
+			ListNode tmp = cur;
+			pre->next = cur->next;
+			cur = cur->next;
+			tmp->next = suc;
+			end->next = tmp;
+			suc = end->next;
+		}
+		else {
+			cur = cur->next;
+			pre = pre->next;
+		}
+	}
+	displayList(head);
+}
+
 int main() {
 	/*
 	// Optn Debug
@@ -388,7 +450,9 @@ int main() {
 	delNode();
 	simpleSelSort();
 	fuckEvenList();
-	*/
 	unionList();
+	cout << "第一个负数节点位置在 " << negativeList18() << endl;
+	negativeSort();
+	*/
 	return 0;
 }
